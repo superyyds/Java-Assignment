@@ -1,10 +1,9 @@
 package src;
-
 public class Diet extends Activity {
     private String dietType;
 
     public Diet(String dietType, double foodConsumed) {
-        super("Diet", foodConsumed);
+        super("Diet", foodConsumed);  // Ensure Activity constructor matches this
         this.dietType = dietType;
     }
 

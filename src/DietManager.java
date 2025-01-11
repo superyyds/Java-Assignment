@@ -38,12 +38,16 @@ public class DietManager {
                 foodList.add(new DietFood("Beef (beef herd)", 99.48));
                 foodList.add(new DietFood("Poultry", 9.87));
                 foodList.add(new DietFood("Pork", 12.31));
-                
                 break;
             default:
                 System.out.println("Invalid diet type. Defaulting to common foods only.");
                 break;
         }
+    }
+
+    // Get the list of foods
+    public List<DietFood> getFoodList() {
+        return foodList;
     }
 
     // Display the list of foods
@@ -61,7 +65,8 @@ public class DietManager {
         boolean continueSelection = true;
 
         while (continueSelection) {
-            displayFoodList();
+            System.out.println("Food Choices:");
+            displayFoodList(); // Show the list of food only once
             System.out.print("Select a food by number: ");
             int choice = scanner.nextInt() - 1;
 
@@ -78,7 +83,9 @@ public class DietManager {
             }
 
             System.out.print("Would you like to select another food? (yes/no): ");
-            continueSelection = scanner.next().equalsIgnoreCase("yes");
+            scanner.nextLine(); 
+            String response = scanner.nextLine().toLowerCase();
+            continueSelection = response.equals("yes");
         }
 
         return totalEmission;
