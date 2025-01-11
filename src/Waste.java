@@ -1,14 +1,34 @@
 package src;
-import java.util.Scanner;
 
-public class Waste {
-    public static double calculateWasteEmission(Scanner scanner) {
-        System.out.print("Enter number of bags of waste generated per week: ");
-        int bagsPerWeek = scanner.nextInt();
-        double emissionPerBag = 5.0; // Average emission per bag (kg CO₂)
+public class Waste extends Activity {
+    private String disposalMethod;
 
-        double monthlyEmission = bagsPerWeek * emissionPerBag * 4; // 4 weeks in a month
-        System.out.printf("Waste Emission: %.2f kg CO₂/month\n", monthlyEmission);
-        return monthlyEmission;
+    public Waste(double wasteGenerated, String disposalMethod) {
+        super("Waste", wasteGenerated);
+        this.disposalMethod = disposalMethod;
+    }
+
+    @Override
+    public double calculateEmissions() {
+        double emissionFactor = 0.0;
+        switch (disposalMethod.toLowerCase()) {
+            case "landfill":
+                emissionFactor = 0.9; // kg CO2 per kg of waste
+                break;
+            case "recycling":
+                emissionFactor = -0.5; // Negative value for reduction
+                break;
+            case "composting":
+                emissionFactor = -0.2;
+                break;
+        }
+        return emissionFactor * quantity;
+    }
+
+    @Override
+    public String getReductionSuggestion() {
+        return "Suggestion: Recycle, compost organic waste, and reduce overall waste generation.";
     }
 }
+
+
