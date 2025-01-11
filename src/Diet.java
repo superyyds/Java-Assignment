@@ -6,14 +6,23 @@ public class Diet {
         System.out.print("Enter your diet type (vegan, vegetarian, omnivore): ");
         String dietType = scanner.next().toLowerCase();
 
-        double emissionFactor = switch (dietType) {
-            case "vegan" -> 125.0;
-            case "vegetarian" -> 150.0;
-            case "omnivore" -> 208.0;
-            default -> 0.0; // Unknown diet type
-        };
+        double emissionFactor;
+        switch (dietType) {
+            case "vegan":
+                emissionFactor = 125.0;
+                break;
+            case "vegetarian":
+                emissionFactor = 150.0;
+                break;
+            case "omnivore":
+                emissionFactor = 208.0;
+                break;
+            default:
+                emissionFactor = 0.0; // Unknown diet type
+                break;
+        }
 
-        System.out.printf("Diet Emission: %.2f kg CO₂/month\n", emissionFactor);
+        System.out.printf("Diet Emission: %.2f kg CO2/month\n", emissionFactor);
         return emissionFactor;
     }
 }

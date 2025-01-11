@@ -16,7 +16,20 @@ public class Main {
 
         // Diet Module
         System.out.println("\n--- Diet Emissions ---");
-        double dietEmission = Diet.calculateDietEmission(scanner);
+        // double dietEmission = Diet.calculateDietEmission(scanner);
+        // Create a DietManager instance
+        DietManager manager = new DietManager();
+
+        // Prompt user for diet type
+        System.out.print("Enter your diet type (vegan, vegetarian, omnivore): ");
+        String dietType = scanner.next();
+        manager.setDietType(dietType);
+
+        // Initialize and display food list based on diet type
+        manager.initializeFoodList();
+
+        // Calculate total carbon footprint
+        double dietEmission = manager.calculateFoodEmission(scanner);
 
         // Waste Module
         System.out.println("\n--- Waste Emissions ---");
@@ -24,7 +37,7 @@ public class Main {
 
         // Total Emission
         double totalEmission = transportEmission + energyEmission + dietEmission + wasteEmission;
-        System.out.printf("\nYour Total Monthly Carbon Footprint: %.2f kg CO₂\n", totalEmission);
+        System.out.printf("\nYour Total Monthly Carbon Footprint: %.2f kg CO2\n", totalEmission);
 
         scanner.close();
     }
