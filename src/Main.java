@@ -8,13 +8,10 @@ public class Main {
 
         System.out.println("Welcome to the Carbon Footprint Calculator!\n");
 
-        // Initialize the total emissions variable
         double totalEmissions = 0.0;
-
         boolean continueCalculating = true;
 
         while (continueCalculating) {
-            // Display main menu to user
             System.out.println("--- Main Menu ---");
             System.out.println("1. Calculate Transport Emissions");
             System.out.println("2. Calculate Energy Emissions");
@@ -33,7 +30,7 @@ public class Main {
                     double distance = getDistance(scanner);
                     Transport transport = new Transport(transportMode, distance);
                     double transportEmissions = transport.calculateEmissions();
-                    totalEmissions += transportEmissions; // Add emissions to total
+                    totalEmissions += transportEmissions;
                     System.out.println("Transport Emissions: " + transportEmissions + " kg CO2");
                     System.out.println(transport.getReductionSuggestion());
                     break;
@@ -41,11 +38,23 @@ public class Main {
                 case 2:
                     // Energy Module
                     System.out.println("\n--- Energy Emissions ---");
+                    // Display emission choices first
+                    Energy.displayEmissionChoices();  
+                    System.out.print("Select the Electricity Source: ");
+                    int energyChoice = getValidChoice(scanner);  // Get user choice for energy source
+                    double energyEmissionFactor = Energy.getEmissionFactorFromChoice(energyChoice);
+                    
+                    // Get energy consumed next
                     double energyConsumed = getEnergyConsumed(scanner);
-                    double energyEmissionFactor = getEnergyEmissionFactor(scanner);
-                    Energy energy = new Energy(energyConsumed, energyEmissionFactor, 0); // Assuming no renewable energy
+                    
+                    // Then ask for renewable energy percentage
+                    System.out.print("Enter renewable energy percentage (0 to 100): ");
+                    double renewablePercentage = Double.parseDouble(scanner.nextLine()); // Custom renewable percentage
+                    
+                    // Create an Energy object with the inputs
+                    Energy energy = new Energy(energyConsumed, energyEmissionFactor, renewablePercentage);
                     double energyEmissions = energy.calculateEmissions();
-                    totalEmissions += energyEmissions; // Add emissions to total
+                    totalEmissions += energyEmissions;
                     System.out.println("Energy Emissions: " + energyEmissions + " kg CO2");
                     System.out.println(energy.getReductionSuggestion());
                     break;
@@ -57,7 +66,7 @@ public class Main {
                     double foodConsumed = getFoodConsumed(scanner);
                     Diet diet = new Diet(dietType, foodConsumed);
                     double dietEmissions = diet.calculateEmissions();
-                    totalEmissions += dietEmissions; // Add emissions to total
+                    totalEmissions += dietEmissions;
                     System.out.println("Diet Emissions: " + dietEmissions + " kg CO2");
                     System.out.println(diet.getReductionSuggestion());
                     break;
@@ -69,7 +78,7 @@ public class Main {
                     String disposalMethod = getDisposalMethod(scanner);
                     Waste waste = new Waste(wasteGenerated, disposalMethod);
                     double wasteEmissions = waste.calculateEmissions();
-                    totalEmissions += wasteEmissions; // Add emissions to total
+                    totalEmissions += wasteEmissions;
                     System.out.println("Waste Emissions: " + wasteEmissions + " kg CO2");
                     System.out.println(waste.getReductionSuggestion());
                     break;
@@ -82,10 +91,9 @@ public class Main {
                     break;
 
                 default:
-                    System.out.println("Invalid choice. Please select a valid option (1-5).");
+                    System.out.print("Invalid choice. Please select a valid option.");
             }
 
-            // Ask if the user wants to continue or exit after completing a section
             if (choice != 5) {
                 System.out.print("\nDo you want to calculate another section? (y/n): ");
                 String continueChoice = scanner.nextLine().toLowerCase();
@@ -100,14 +108,13 @@ public class Main {
         scanner.close();
     }
 
-    // Method to handle valid input for menu choices
     private static int getValidChoice(Scanner scanner) {
         int choice = 0;
         while (true) {
             try {
                 choice = Integer.parseInt(scanner.nextLine());
                 if (choice < 1 || choice > 5) {
-                    System.out.println("Invalid choice. Please select a valid option (1-5).");
+                    System.out.print("Invalid choice. Please select a valid option.");
                 } else {
                     break;
                 }
@@ -135,7 +142,7 @@ public class Main {
                 }
                 break;
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid number.");
+                System.out.print("Invalid input. Please enter a valid number:");
             }
         }
         return distance;
@@ -153,28 +160,10 @@ public class Main {
                 }
                 break;
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid number.");
+                System.out.print("Invalid input. Please enter a valid number:");
             }
         }
         return energyConsumed;
-    }
-
-    private static double getEnergyEmissionFactor(Scanner scanner) {
-        double emissionFactor;
-        while (true) {
-            System.out.print("Enter energy emission factor (kg CO2 per kWh): ");
-            try {
-                emissionFactor = Double.parseDouble(scanner.nextLine());
-                if (emissionFactor < 0) {
-                    System.out.println("Emission factor cannot be negative. Please try again.");
-                    continue;
-                }
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid number.");
-            }
-        }
-        return emissionFactor;
     }
 
     private static String getDietType(Scanner scanner) {
@@ -194,7 +183,7 @@ public class Main {
                 }
                 break;
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid number.");
+                System.out.println("Invalid input. Please enter a valid number:");
             }
         }
         return foodConsumed;
@@ -212,7 +201,7 @@ public class Main {
                 }
                 break;
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid number.");
+                System.out.println("Invalid input. Please enter a valid number:");
             }
         }
         return wasteGenerated;
