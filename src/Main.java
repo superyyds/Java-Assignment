@@ -197,7 +197,6 @@ public class Main {
         double wasteGenerated = 0;
         System.out.print("Enter the amount of waste generated (in kg): ");
         while (true) {
-            System.out.print("Enter waste generated (in kg): ");
             try {
                 wasteGenerated = Double.parseDouble(scanner.nextLine());
                 if (wasteGenerated <= 0) {
@@ -212,8 +211,9 @@ public class Main {
         return wasteGenerated;
     }
 
+    // Method to get the waste disposal method
     private static String getDisposalMethod(Scanner scanner) {
-        System.out.print("Enter waste disposal method (landfill, recycling, composting): ");
+        System.out.print("Enter the waste disposal method (recycling, landfill, compost, etc.): ");
         return scanner.nextLine().toLowerCase();
     }
 }
