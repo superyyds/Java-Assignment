@@ -1,18 +1,20 @@
 package src;
-import java.util.Scanner;
 
-public class Energy {
-    public static double calculateEnergyEmission(Scanner scanner) {
-        System.out.print("Enter monthly electricity usage (in kWh): ");
-        double electricityUsage = scanner.nextDouble();
-        System.out.print("Enter percentage of renewable energy (0-100): ");
-        double renewablePercentage = scanner.nextDouble();
+public class Energy extends Activity {
+    private double emissionFactor;
 
-        double emissionFactor = 0.85; // Default for coal-based grid
-        double nonRenewableFactor = 1 - (renewablePercentage / 100.0);
+    public Energy(double energyConsumed, double emissionFactor) {
+        super("Energy", energyConsumed);
+        this.emissionFactor = emissionFactor;
+    }
+    
+    @Override
+    public double calculateEmissions() {
+        return emissionFactor * quantity; // kg CO2 = kWh * emission factor
+    }
 
-        double monthlyEmission = electricityUsage * emissionFactor * nonRenewableFactor;
-        System.out.printf("Energy Emission: %.2f kg CO₂/month\n", monthlyEmission);
-        return monthlyEmission;
+    @Override
+    public String getReductionSuggestion() {
+        return "Suggestion: Switch to renewable energy sources and reduce energy consumption.";
     }
 }

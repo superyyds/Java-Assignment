@@ -1,26 +1,35 @@
 package src;
-import java.util.Scanner;
 
-public class Transport {
-    public static double calculateTransportEmission(Scanner scanner) {
-        System.out.print("Enter daily distance traveled (in km): ");
-        double distance = scanner.nextDouble();
-        System.out.print("Enter mode of transport (car, bus, train, plane): ");
-        String mode = scanner.next().toLowerCase();
+public class Transport extends Activity {
+    private String transportMode;
 
-        double emissionFactor = switch (mode) {
-            case "car" -> 0.21;
-            case "bus" -> 0.10;
-            case "train" -> 0.05;
-            case "plane" -> 0.25;
-            default -> 0.0; // Bike or walking
-        };
+    public Transport(String transportMode, double distance) {
+        super("Transport", distance);
+        this.transportMode = transportMode;
+    }
 
-        System.out.print("Enter number of days you travel per month: ");
-        int days = scanner.nextInt();
+    @Override
+    public double calculateEmissions() {
+        double emissionFactor = 0.0;
+        switch (transportMode.toLowerCase()) {
+            case "car":
+                emissionFactor = 0.21; // kg CO2 per km
+                break;
+            case "bus":
+                emissionFactor = 0.10;
+                break;
+            case "bike":
+                emissionFactor = 0.0;
+                break;
+            case "train":
+                emissionFactor = 0.05;
+                break;
+        }
+        return emissionFactor * quantity;
+    }
 
-        double monthlyEmission = distance * emissionFactor * days;
-        System.out.printf("Transport Emission: %.2f kg CO₂/month\n", monthlyEmission);
-        return monthlyEmission;
+    @Override
+    public String getReductionSuggestion() {
+        return "Suggestion: Use public transport, carpool, or switch to biking/walking.";
     }
 }

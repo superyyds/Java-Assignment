@@ -1,19 +1,32 @@
 package src;
-import java.util.Scanner;
 
-public class Diet {
-    public static double calculateDietEmission(Scanner scanner) {
-        System.out.print("Enter your diet type (vegan, vegetarian, omnivore): ");
-        String dietType = scanner.next().toLowerCase();
+public class Diet extends Activity {
+    private String dietType;
 
-        double emissionFactor = switch (dietType) {
-            case "vegan" -> 125.0;
-            case "vegetarian" -> 150.0;
-            case "omnivore" -> 208.0;
-            default -> 0.0; // Unknown diet type
-        };
+    public Diet(String dietType, double foodConsumed) {
+        super("Diet", foodConsumed);
+        this.dietType = dietType;
+    }
 
-        System.out.printf("Diet Emission: %.2f kg CO₂/month\n", emissionFactor);
-        return emissionFactor;
+    @Override
+    public double calculateEmissions() {
+        double emissionFactor = 0.0;
+        switch (dietType.toLowerCase()) {
+            case "vegan":
+                emissionFactor = 2.0; // kg CO2 per kg of food
+                break;
+            case "vegetarian":
+                emissionFactor = 2.5;
+                break;
+            case "omnivore":
+                emissionFactor = 5.0;
+                break;
+        }
+        return emissionFactor * quantity;
+    }
+
+    @Override
+    public String getReductionSuggestion() {
+        return "Suggestion: Reduce meat consumption and prefer locally sourced food.";
     }
 }
