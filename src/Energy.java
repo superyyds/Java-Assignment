@@ -7,7 +7,7 @@ public class Energy extends Activity {
         super("Energy", energyConsumed);
         this.emissionFactor = emissionFactor;
     }
-    
+
     @Override
     public double calculateEmissions() {
         return emissionFactor * quantity; // kg CO2 = kWh * emission factor
