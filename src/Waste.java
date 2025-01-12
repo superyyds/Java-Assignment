@@ -80,7 +80,7 @@ public class Waste extends Activity {
     }
 
     private static String validateDisposalMethod(String disposalMethod) {
-        if (disposalMethod == null || disposalMethod.isBlank()) {
+        if (disposalMethod == null || disposalMethod.trim().isEmpty()) {
             throw new IllegalArgumentException("Disposal method cannot be null or empty.");
         }
         switch (disposalMethod.toLowerCase()) {

@@ -36,6 +36,7 @@ public class Energy extends Activity {
     @Override
     public String getReductionSuggestion() {
         StringBuilder suggestion = new StringBuilder("Suggestion: ");
+        suggestion.append("Switch to higher renewable energy sources or suppliers. ");
         suggestion.append("Reduce energy consumption by using energy-efficient appliances and turning off unused devices.");
         return suggestion.toString();
     }
