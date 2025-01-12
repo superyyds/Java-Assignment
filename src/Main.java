@@ -29,13 +29,21 @@ public class Main {
                 case 1:
                     // Transport Module
                     System.out.println("\n--- Transport Emissions ---");
+                    TransportManager transportManager = new TransportManager(); 
+                    transportManager.displayTransportModes(); 
                     String transportMode = getTransportMode(scanner);
-                    double distance = getDistance(scanner);
-                    Transport transport = new Transport(transportMode, distance);
-                    double transportEmissions = transport.calculateEmissions();
-                    totalEmissions += transportEmissions;
-                    System.out.println("Transport Emissions: " + transportEmissions + " kg CO2");
-                    System.out.println(transport.getReductionSuggestion());
+                    TransportMode selectedMode = transportManager.getTransportMode(transportMode);
+                     if (selectedMode != null) {
+                          double distance = getDistance(scanner); 
+                          double emissionFactor = selectedMode.getEmissionFactor();
+                          Transport transport = new Transport(selectedMode.getMode(), distance, emissionFactor);
+                          double transportEmissions = transport.calculateEmissions();
+                          totalEmissions += transportEmissions;
+                          System.out.println("Transport Emissions: " + String.format("%.2f", transportEmissions) + " kg CO2");
+                          System.out.println(transport.getReductionSuggestion());
+                       } else { 
+                              System.out.println("Invalid transport mode. Please try again.");
+                             }
                     break;
 
                 case 2:
@@ -84,7 +92,7 @@ public class Main {
 
                 case 5:
                     // Exit and display the Total Carbon Footprint
-                    System.out.println("\nTotal Carbon Footprint: " + totalEmissions + " kg CO2");
+                    System.out.println("\nTotal Carbon Footprint: " + String.format("%.2f", totalEmissions) + " kg CO2");
                     System.out.println("Exiting the program. Goodbye!");
                     continueCalculating = false;
                     break;
@@ -111,7 +119,6 @@ public class Main {
                 }
             }
         }
-
         scanner.close();
     }
 
