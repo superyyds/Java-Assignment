@@ -51,7 +51,7 @@ public class Main {
                     double energyConsumed = getEnergyConsumed(scanner);
                     
                     // Then ask for renewable energy percentage
-                    System.out.print("Enter renewable energy percentage (0 - 100): ");
+                    System.out.print("Enter renewable energy percentage (0 to 100): ");
                     double renewablePercentage = Double.parseDouble(scanner.nextLine()); // Custom renewable percentage
                     
                     // Create an Energy object with the inputs
