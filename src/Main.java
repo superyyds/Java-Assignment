@@ -46,28 +46,11 @@ public class Main {
                              }
                     break;
 
-                case 2:
-                    // Energy Module
+                    case 2:
                     System.out.println("\n--- Energy Emissions ---");
-                    // Display emission choices first
-                    Energy.displayEmissionChoices();  
-                    System.out.print("Select the Electricity Source: ");
-                    int energyChoice = getValidChoice(scanner);  // Get user choice for energy source
-                    double energyEmissionFactor = Energy.getEmissionFactorFromChoice(energyChoice);
-                    
-                    // Get energy consumed next
-                    double energyConsumed = getEnergyConsumed(scanner);
-                    
-                    // Then ask for renewable energy percentage
-                    System.out.print("Enter renewable energy percentage (0 to 100): ");
-                    double renewablePercentage = Double.parseDouble(scanner.nextLine()); // Custom renewable percentage
-                    
-                    // Create an Energy object with the inputs
-                    Energy energy = new Energy(energyConsumed, energyEmissionFactor, renewablePercentage);
-                    double energyEmissions = energy.calculateEmissions();
-                    totalEmissions += energyEmissions;
-                    System.out.println("Energy Emissions: " + energyEmissions + " kg CO2");
-                    System.out.println(energy.getReductionSuggestion());
+                    EnergyManager energyManager = new EnergyManager();
+                    double energyEmissions = energyManager.manageEnergyCalculations(scanner);  // Get emissions
+                    totalEmissions += energyEmissions;  // Add to total carbon footprint
                     break;
 
                 case 3:
@@ -187,25 +170,6 @@ public class Main {
             }
         }
         return distance;
-    }
-
-    // Method to get the energy consumed for energy emissions
-    private static double getEnergyConsumed(Scanner scanner) {
-        double energyConsumed = 0;
-        System.out.print("Enter the energy consumed (in kWh): ");
-        while (true) {
-            try {
-                energyConsumed = Double.parseDouble(scanner.nextLine());
-                if (energyConsumed <= 0) {
-                    System.out.println("Please enter a positive number for the energy consumed.");
-                } else {
-                    break;
-                }
-            } catch (NumberFormatException e) {
-                System.out.print("Invalid input. Please enter a valid number:");
-            }
-        }
-        return energyConsumed;
     }
 
     // Method to get the user's diet type
