@@ -29,13 +29,21 @@ public class Main {
                 case 1:
                     // Transport Module
                     System.out.println("\n--- Transport Emissions ---");
+                    TransportManager transportManager = new TransportManager(); 
+                    transportManager.displayTransportModes(); 
                     String transportMode = getTransportMode(scanner);
-                    double distance = getDistance(scanner);
-                    Transport transport = new Transport(transportMode, distance);
-                    double transportEmissions = transport.calculateEmissions();
-                    totalEmissions += transportEmissions;
-                    System.out.println("Transport Emissions: " + transportEmissions + " kg CO2");
-                    System.out.println(transport.getReductionSuggestion());
+                    TransportMode selectedMode = transportManager.getTransportMode(transportMode);
+                     if (selectedMode != null) {
+                          double distance = getDistance(scanner); 
+                          double emissionFactor = selectedMode.getEmissionFactor();
+                          Transport transport = new Transport(selectedMode.getMode(), distance, emissionFactor);
+                          double transportEmissions = transport.calculateEmissions();
+                          totalEmissions += transportEmissions;
+                          System.out.println("Transport Emissions: " + String.format("%.2f", transportEmissions) + " kg CO2");
+                          System.out.println(transport.getReductionSuggestion());
+                       } else { 
+                              System.out.println("Invalid transport mode. Please try again.");
+                             }
                     break;
 
                 case 2:
@@ -70,21 +78,46 @@ public class Main {
                     totalEmissions += manager.calculateFoodEmission(scanner); // Calculate emissions for food
                     break;
 
-                case 4:
+                    case 4:
                     // Waste Module
                     System.out.println("\n--- Waste Emissions ---");
-                    double wasteGenerated = getWasteGenerated(scanner);
-                    String disposalMethod = getDisposalMethod(scanner);
-                    Waste waste = new Waste(wasteGenerated, disposalMethod);
-                    double wasteEmissions = waste.calculateEmissions();
-                    totalEmissions += wasteEmissions;
-                    System.out.println("Waste Emissions: " + wasteEmissions + " kg CO2");
+
+                    // Input for plastic waste
+                    System.out.print("Enter plastic waste generated (in kg): ");
+                    double plasticWaste = getPositiveDouble(scanner);
+                    String plasticDisposal = getDisposalMethod(scanner);
+
+                    // Input for paper waste
+                    System.out.print("Enter paper waste generated (in kg): ");
+                    double paperWaste = getPositiveDouble(scanner);
+                    String paperDisposal = getDisposalMethod(scanner);
+
+                    // Input for glass waste
+                    System.out.print("Enter glass waste generated (in kg): ");
+                    double glassWaste = getPositiveDouble(scanner);
+                    String glassDisposal = getDisposalMethod(scanner);
+
+                    // Create Waste object
+                    Waste waste = new Waste(plasticWaste, plasticDisposal, paperWaste, paperDisposal, glassWaste, glassDisposal);
+                    double[] wasteEmissions = waste.calculateWasteEmissions();
+                    double positiveEmissions = wasteEmissions[0];
+                    double negativeEmissions = wasteEmissions[1];
+
+                   
+                    totalEmissions += positiveEmissions + negativeEmissions;
+
+                    // Display results
+                    System.out.println("Positive Waste Emissions: " + positiveEmissions + " kg CO2");
+                    System.out.println("Negative Waste Emissions: " + negativeEmissions + " kg CO2");
+                    System.out.println("Net Waste Emissions: " + (positiveEmissions + negativeEmissions) + " kg CO2");
                     System.out.println(waste.getReductionSuggestion());
                     break;
 
+
+
                 case 5:
                     // Exit and display the Total Carbon Footprint
-                    System.out.println("\nTotal Carbon Footprint: " + totalEmissions + " kg CO2");
+                    System.out.println("\nTotal Carbon Footprint: " + String.format("%.2f", totalEmissions) + " kg CO2");
                     System.out.println("Exiting the program. Goodbye!");
                     continueCalculating = false;
                     break;
@@ -111,7 +144,6 @@ public class Main {
                 }
             }
         }
-
         scanner.close();
     }
 
@@ -192,15 +224,13 @@ public class Main {
         return dietType;
     }
 
-    // Method to get the waste generated
-    private static double getWasteGenerated(Scanner scanner) {
-        double wasteGenerated = 0;
-        System.out.print("Enter the amount of waste generated (in kg): ");
+    private static double getPositiveDouble(Scanner scanner) {
+        double value;
         while (true) {
             try {
-                wasteGenerated = Double.parseDouble(scanner.nextLine());
-                if (wasteGenerated <= 0) {
-                    System.out.println("Please enter a positive number for the waste generated.");
+                value = Double.parseDouble(scanner.nextLine());
+                if (value < 0) {
+                    System.out.println("Value cannot be negative. Please try again.");
                 } else {
                     break;
                 }
@@ -208,12 +238,20 @@ public class Main {
                 System.out.println("Invalid input. Please enter a valid amount of waste.");
             }
         }
-        return wasteGenerated;
+        return value;
     }
 
     // Method to get the waste disposal method
     private static String getDisposalMethod(Scanner scanner) {
-        System.out.print("Enter the waste disposal method (recycling, landfill, compost, etc.): ");
-        return scanner.nextLine().toLowerCase();
+        while (true) {
+            System.out.print("Enter waste disposal method (landfill, recycling, composting): ");
+            String method = scanner.nextLine().toLowerCase();
+            if (method.equals("landfill") || method.equals("recycling") || method.equals("composting")) {
+                return method;
+            }
+            System.out.println("Invalid disposal method. Please choose from 'landfill', 'recycling', or 'composting'.");
+        }
     }
+
+
 }
