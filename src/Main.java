@@ -49,27 +49,10 @@ public class Main {
                 case 2:
                     // Energy Module
                     System.out.println("\n--- Energy Emissions ---");
-                    // Display emission choices first
-                    Energy.displayEmissionChoices();  
-                    System.out.print("Select the Electricity Source: ");
-                    int energyChoice = getValidChoice(scanner);  // Get user choice for energy source
-                    double energyEmissionFactor = Energy.getEmissionFactorFromChoice(energyChoice);
-                    
-                    // Get energy consumed next
-                    double energyConsumed = getEnergyConsumed(scanner);
-                    
-                    // Then ask for renewable energy percentage
-                    System.out.print("Enter renewable energy percentage (0 to 100): ");
-                    double renewablePercentage = Double.parseDouble(scanner.nextLine()); // Custom renewable percentage
-                    
-                    // Create an Energy object with the inputs
-                    Energy energy = new Energy(energyConsumed, energyEmissionFactor, renewablePercentage);
-                    double energyEmissions = energy.calculateEmissions();
-                    totalEmissions += energyEmissions;
-                    System.out.println("Energy Emissions: " + energyEmissions + " kg CO2");
-                    System.out.println(energy.getReductionSuggestion());
+                    EnergyManager energyManager = new EnergyManager();
+                    energyManager.calculateEnergyEmissions(scanner);
                     break;
-
+        
                 case 3:
                     // Diet Module
                     System.out.println("\n--- Diet Emissions ---");
