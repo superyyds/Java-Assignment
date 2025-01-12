@@ -62,17 +62,42 @@ public class Main {
                     System.out.println(diet.getReductionSuggestion());
                     break;
 
-                case 4:
+                    case 4:
                     // Waste Module
                     System.out.println("\n--- Waste Emissions ---");
-                    double wasteGenerated = getWasteGenerated(scanner);
-                    String disposalMethod = getDisposalMethod(scanner);
-                    Waste waste = new Waste(wasteGenerated, disposalMethod);
-                    double wasteEmissions = waste.calculateEmissions();
-                    totalEmissions += wasteEmissions; // Add emissions to total
-                    System.out.println("Waste Emissions: " + wasteEmissions + " kg CO2");
+
+                    // Input for plastic waste
+                    System.out.print("Enter plastic waste generated (in kg): ");
+                    double plasticWaste = getPositiveDouble(scanner);
+                    String plasticDisposal = getDisposalMethod(scanner);
+
+                    // Input for paper waste
+                    System.out.print("Enter paper waste generated (in kg): ");
+                    double paperWaste = getPositiveDouble(scanner);
+                    String paperDisposal = getDisposalMethod(scanner);
+
+                    // Input for glass waste
+                    System.out.print("Enter glass waste generated (in kg): ");
+                    double glassWaste = getPositiveDouble(scanner);
+                    String glassDisposal = getDisposalMethod(scanner);
+
+                    // Create Waste object
+                    Waste waste = new Waste(plasticWaste, plasticDisposal, paperWaste, paperDisposal, glassWaste, glassDisposal);
+                    double[] wasteEmissions = waste.calculateWasteEmissions();
+                    double positiveEmissions = wasteEmissions[0];
+                    double negativeEmissions = wasteEmissions[1];
+
+                    // Add emissions to total
+                    totalEmissions += positiveEmissions + negativeEmissions;
+
+                    // Display results
+                    System.out.println("Positive Waste Emissions: " + positiveEmissions + " kg CO2");
+                    System.out.println("Negative Waste Emissions: " + negativeEmissions + " kg CO2");
+                    System.out.println("Net Waste Emissions: " + (positiveEmissions + negativeEmissions) + " kg CO2");
                     System.out.println(waste.getReductionSuggestion());
                     break;
+
+
 
                 case 5:
                     // Exit and display the Total Carbon Footprint
@@ -200,26 +225,33 @@ public class Main {
         return foodConsumed;
     }
 
-    private static double getWasteGenerated(Scanner scanner) {
-        double wasteGenerated;
+    private static double getPositiveDouble(Scanner scanner) {
+        double value;
         while (true) {
-            System.out.print("Enter waste generated (in kg): ");
             try {
-                wasteGenerated = Double.parseDouble(scanner.nextLine());
-                if (wasteGenerated < 0) {
-                    System.out.println("Waste generated cannot be negative. Please try again.");
-                    continue;
+                value = Double.parseDouble(scanner.nextLine());
+                if (value < 0) {
+                    System.out.println("Value cannot be negative. Please try again.");
+                } else {
+                    break;
                 }
-                break;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a valid number.");
             }
         }
-        return wasteGenerated;
+        return value;
     }
 
     private static String getDisposalMethod(Scanner scanner) {
-        System.out.print("Enter waste disposal method (landfill, recycling, composting): ");
-        return scanner.nextLine().toLowerCase();
+        while (true) {
+            System.out.print("Enter waste disposal method (landfill, recycling, composting): ");
+            String method = scanner.nextLine().toLowerCase();
+            if (method.equals("landfill") || method.equals("recycling") || method.equals("composting")) {
+                return method;
+            }
+            System.out.println("Invalid disposal method. Please choose from 'landfill', 'recycling', or 'composting'.");
+        }
     }
+
+
 }
